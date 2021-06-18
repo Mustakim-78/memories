@@ -1,35 +1,28 @@
 import React,{useState, useEffect} from 'react';
 import {useDispatch} from 'react-redux';
 import {useHistory, Link, useLocation} from 'react-router-dom';
-import decode from 'jwt-decode';
 import {AppBar, Typography, Avatar, Toolbar, Button} from '@material-ui/core';
 import memories from '../../images/memories.png';
 import useStyles from './styles';
 
 const Navbar = () => {
+    const [user, setuser] = useState(JSON.parse(localStorage.getItem('profile')));
     const dispatch = useDispatch();
     const history = useHistory();
     const location = useLocation();
-    useEffect(() => {
-        const token = user?.token;
-        if(token){
-            const decoded = decode(token);
-            if(decoded.exp * 1000 < new Date().getTime())
-                Logout();
-        }
-
-        setuser(JSON.parse(localStorage.getItem('profile')));
-    }, [location]);
-    
     const Logout = () => {
         dispatch({type:"LOGOUT"});
 
         history.push('/');
         setuser(null);
     }
+    useEffect(() => {
+        //  const token = user?.token;
+        
+        setuser(JSON.parse(localStorage.getItem('profile')));
+    }, [location,user]);
+    
     const classes = useStyles();
-    const [user, setuser] = useState(JSON.parse(localStorage.getItem('profile')));
-    console.log(user);
     return(
     <AppBar className={classes.appBar} position = "static" color = "inherit">
         <div>
